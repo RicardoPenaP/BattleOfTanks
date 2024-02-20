@@ -1,18 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.UI;
 
-namespace Gameplay.UI
+namespace Networking.UI
 {
-    public class JoinServer : MonoBehaviour
+    public class JoinServerButton : MonoBehaviour
     {
         private Button joinButton;
 
         private void Awake()
         {
-            joinButton = GetComponent<Button>();            
+            joinButton = GetComponent<Button>();
         }
 
         private void Start()
