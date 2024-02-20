@@ -346,7 +346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7356954870266389585}
   - component: {fileID: 8660862514234138538}
-  - component: {fileID: 375955052213633}
+  - component: {fileID: 4543109357224319121}
   - component: {fileID: 1782672651320228082}
   m_Layer: 0
   m_Name: Player
@@ -391,7 +391,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &375955052213633
+--- !u!114 &4543109357224319121
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4061060014626636851}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: ec9c1f97ba10d4e4da35d122f1e9084d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SyncPositionX: 1
@@ -464,7 +464,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.75, y: 2}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!1 &4290854210877289407
 GameObject:
@@ -508,7 +508,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4826434526131997255}
-  - component: {fileID: 6280907652911766933}
+  - component: {fileID: 1109521571307884482}
   m_Layer: 0
   m_Name: TankTurret
   m_TagString: Untagged
@@ -533,7 +533,7 @@ Transform:
   - {fileID: 865245241100418704}
   m_Father: {fileID: 8072369787900541368}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6280907652911766933
+--- !u!114 &1109521571307884482
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -542,7 +542,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5346517189526060786}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: ec9c1f97ba10d4e4da35d122f1e9084d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SyncPositionX: 0
@@ -773,7 +773,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 318221260223627290}
-  - component: {fileID: 1346335713027859922}
+  - component: {fileID: 1395465610762115612}
   m_Layer: 0
   m_Name: TankBody
   m_TagString: Untagged
@@ -798,7 +798,7 @@ Transform:
   - {fileID: 9001091582575116814}
   m_Father: {fileID: 8072369787900541368}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1346335713027859922
+--- !u!114 &1395465610762115612
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -807,7 +807,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7545790266214892186}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: ec9c1f97ba10d4e4da35d122f1e9084d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SyncPositionX: 0
