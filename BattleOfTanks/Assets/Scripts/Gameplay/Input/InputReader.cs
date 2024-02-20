@@ -13,11 +13,15 @@ namespace Gameplay.Input
 
         private Controls controls;
 
+        public Vector2 MousePosition { get; private set; }
+
         private void OnEnable()
         {
             InitializeControls();
 
             controls.Player.Enable();
+
+            MousePosition = Vector2.zero;
         }
 
         public void OnMove(InputAction.CallbackContext context)
@@ -36,6 +40,12 @@ namespace Gameplay.Input
             {
                 HandlePrimaryFireInput(false);
             }
+        }
+
+        public void OnAim(InputAction.CallbackContext context)
+        {
+            Vector2 rawInput = context.ReadValue<Vector2>();
+            HandleMousePositionInput(rawInput);
         }
 
         private void InitializeControls()
@@ -57,6 +67,11 @@ namespace Gameplay.Input
         private void HandlePrimaryFireInput(bool state)
         {
             OnPrimaryFireInputDetected?.Invoke(state);
+        }
+
+        private void HandleMousePositionInput(Vector2 rawInput)
+        {
+            MousePosition = rawInput;
         }
     }
 }
