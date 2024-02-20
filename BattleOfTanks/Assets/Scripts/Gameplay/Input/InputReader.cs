@@ -8,8 +8,8 @@ namespace Gameplay.Input
     [CreateAssetMenu(fileName = "NewInputReader", menuName = "Input/Input Reader")]
     public class InputReader : ScriptableObject, IPlayerActions
     {
-        public event Action<Vector2> MoveEvent;
-        public event Action<bool> PrimaryFireEvent;
+        public event Action<Vector2> OnMoveInputDetected;
+        public event Action<bool> OnPrimaryFireInputDetected;
 
         private Controls controls;
 
@@ -23,20 +23,19 @@ namespace Gameplay.Input
         public void OnMove(InputAction.CallbackContext context)
         {
             Vector2 rawInput = context.ReadValue<Vector2>();
-            MoveEvent?.Invoke(rawInput);
+            HandleMoveInput(rawInput);
         }
 
         public void OnPrimaryFire(InputAction.CallbackContext context)
         {
             if (context.performed)
             {
-                PrimaryFireEvent?.Invoke(true);
+                HandlePrimaryFireInput(true);
             }
-            else if(context.canceled)
+            else if (context.canceled)
             {
-                PrimaryFireEvent?.Invoke(false);
+                HandlePrimaryFireInput(false);
             }
-            
         }
 
         private void InitializeControls()
@@ -48,6 +47,16 @@ namespace Gameplay.Input
 
             controls = new Controls();
             controls.Player.SetCallbacks(this);
+        }
+
+        private void HandleMoveInput(Vector2 rawInput)
+        {
+            OnMoveInputDetected?.Invoke(rawInput);
+        }
+
+        private void HandlePrimaryFireInput(bool state)
+        {
+            OnPrimaryFireInputDetected?.Invoke(state);
         }
     }
 }
