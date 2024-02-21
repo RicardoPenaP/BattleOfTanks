@@ -11,7 +11,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Projectile
   - 
   - 
   - 
@@ -43,6 +43,9 @@ TagManager:
     locked: 0
   - name: Background
     uniqueID: 1255238159
+    locked: 0
+  - name: Projectiles
+    uniqueID: 2221044027
     locked: 0
   - name: Player
     uniqueID: 2036633997
