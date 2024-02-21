@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Unity.Netcode;
 using Gameplay.Input;
+using Gameplay.Player.VFX;
+using System.Collections;
+using Unity.Netcode;
+using UnityEngine;
 
-namespace Gameplay
+namespace Gameplay.Player
 {
     public class PlayerShootingController : NetworkBehaviour
     {
@@ -18,13 +18,19 @@ namespace Gameplay
         [SerializeField] private GameObject clientProjectilePrefab;
 
         [Header("Tank References")]
-        [SerializeField] private Transform[] canonShootingPointsTransforms;
+        [SerializeField] private Transform[] gunShootingPointsTransforms;
+        [SerializeField] private Collider2D tankCollider;
+
+        [Header("VFX References")]
+        [SerializeField] private MuzzleFlash[] gunVFXGameObjects;
 
         [Header("Settings")]
         [SerializeField] private float projectileSpeed;
+        [SerializeField] private float fireRate;
 
         private int shootingPointsTranformsIndex;
         private bool shouldFire = true;
+        private bool canShoot = true;
 
         public override void OnNetworkSpawn()
         {
@@ -64,7 +70,7 @@ namespace Gameplay
         private void Initializalitation()
         {
             inputReader.OnPrimaryFireInputDetected += InputReader_OnPrimaryFireInputDetected;
-            shootingPointsTranformsIndex = Random.Range(0, canonShootingPointsTransforms.Length);
+            shootingPointsTranformsIndex = Random.Range(0, gunShootingPointsTransforms.Length);
         }
 
         private void DesInitializalitation()
@@ -79,34 +85,77 @@ namespace Gameplay
 
         private void Shoot()
         {
-            SpawnProjectileServerRpc(canonShootingPointsTransforms[shootingPointsTranformsIndex].position,
-                                  canonShootingPointsTransforms[shootingPointsTranformsIndex].up);
+            if (!canShoot)
+            {
+                return;
+            }
 
-            SpawnClientProjectile(canonShootingPointsTransforms[shootingPointsTranformsIndex].position,
-                                  canonShootingPointsTransforms[shootingPointsTranformsIndex].up);
+            SpawnProjectileServerRpc(gunShootingPointsTransforms[shootingPointsTranformsIndex].position,
+                                  gunShootingPointsTransforms[shootingPointsTranformsIndex].up, shootingPointsTranformsIndex);
+
+            SpawnClientProjectile(gunShootingPointsTransforms[shootingPointsTranformsIndex].position,
+                                  gunShootingPointsTransforms[shootingPointsTranformsIndex].up, shootingPointsTranformsIndex);
+
+
+            shootingPointsTranformsIndex = shootingPointsTranformsIndex < gunShootingPointsTransforms.Length - 1 ?
+                                            shootingPointsTranformsIndex + 1 : 0;
+
+            canShoot = false;
+            StartCoroutine(ShootCooldownRoutine());
         }
 
-        private void SpawnClientProjectile(Vector3 spawPosition, Vector3 direction)
+        private void SpawnClientProjectile(Vector3 spawnPosition, Vector3 direction, int index)
         {
-            GameObject projectileInstance = Instantiate(clientProjectilePrefab, spawPosition, Quaternion.identity);
-            projectileInstance.transform.up = direction;
+            ProjectileInstantiation(clientProjectilePrefab, spawnPosition, direction);
+            ActivateVFX(index);
         }
 
         [ServerRpc]
-        private void SpawnProjectileServerRpc(Vector3 spawPosition, Vector3 direction)
+        private void SpawnProjectileServerRpc(Vector3 spawnPosition, Vector3 direction, int index)
         {
-            GameObject projectileInstance = Instantiate(serverProjectilePrefab, spawPosition, Quaternion.identity);
-            projectileInstance.transform.up = direction;
+            ProjectileInstantiation(serverProjectilePrefab, spawnPosition, direction);
+            SpawnProjectileClientRpc(spawnPosition, direction, index);
         }
 
         [ClientRpc]
-        private void SpawnProjectileClientRpc(Vector3 spawPosition, Vector3 direction)
+        private void SpawnProjectileClientRpc(Vector3 spawnPosition, Vector3 direction, int index)
         {
             if (IsOwner)
             {
                 return;
             }
-            SpawnClientProjectile(spawPosition, direction);
+            SpawnClientProjectile(spawnPosition, direction, index);
+        }
+
+        private void ProjectileInstantiation(GameObject projectilePrefab, Vector3 spawnPosition, Vector3 direction)
+        {
+            GameObject projectileInstance = Instantiate(projectilePrefab, spawnPosition, Quaternion.identity);
+            projectileInstance.transform.up = direction;
+
+            Physics2D.IgnoreCollision(tankCollider, projectileInstance.GetComponent<Collider2D>());
+
+            if (projectileInstance.TryGetComponent(out Rigidbody2D projectileRigidbody2D))
+            {
+                projectileRigidbody2D.velocity = projectileRigidbody2D.transform.up * projectileSpeed;
+            }
+        }
+
+        private void ActivateVFX(int index)
+        {
+            gunVFXGameObjects[index].Activate();
+        }
+
+        private IEnumerator ShootCooldownRoutine()
+        {
+            float timer = 1 / fireRate;
+
+            while (timer > 0)
+            {
+                timer -= Time.deltaTime;
+                yield return null;
+            }
+
+            canShoot = true;
         }
     }
 }

@@ -2,7 +2,7 @@ using Gameplay.Input;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Gameplay
+namespace Gameplay.Player
 {
     public class PlayerAiming : NetworkBehaviour
     {
