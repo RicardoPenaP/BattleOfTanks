@@ -1,3 +1,4 @@
+using Gameplay.Combat.DamageDealers;
 using Gameplay.Input;
 using Gameplay.Player.VFX;
 using System.Collections;
@@ -137,6 +138,11 @@ namespace Gameplay.Player
             if (projectileInstance.TryGetComponent(out Rigidbody2D projectileRigidbody2D))
             {
                 projectileRigidbody2D.velocity = projectileRigidbody2D.transform.up * projectileSpeed;
+            }
+
+            if (projectileInstance.TryGetComponent(out DealDamageOnContact dealDamageOnContact))
+            {
+                dealDamageOnContact.SetOwnerClientId(OwnerClientId);
             }
         }
 
